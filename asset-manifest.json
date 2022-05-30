@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/nameisjayant.github.io/static/css/main.518edf8c.css",
+    "main.js": "/nameisjayant.github.io/static/js/main.ca29c456.js",
+    "static/js/787.9bb1f542.chunk.js": "/nameisjayant.github.io/static/js/787.9bb1f542.chunk.js",
+    "index.html": "/nameisjayant.github.io/index.html",
+    "main.518edf8c.css.map": "/nameisjayant.github.io/static/css/main.518edf8c.css.map",
+    "main.ca29c456.js.map": "/nameisjayant.github.io/static/js/main.ca29c456.js.map",
+    "787.9bb1f542.chunk.js.map": "/nameisjayant.github.io/static/js/787.9bb1f542.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.518edf8c.css",
+    "static/js/main.ca29c456.js"
+  ]
+}
