@@ -34,8 +34,8 @@ function Login() {
           setCode("green")
           console.log(response.code)
           setError("Login Successful")
-          localStorage.setItem("token",response.data['token'])
-          localStorage.setItem('userId',response.data['userId'])
+          localStorage.setItem("token",response.data.data['token'])
+          localStorage.setItem('userId',response.data.data['userId'])
           redirecting()
         }
         else{
