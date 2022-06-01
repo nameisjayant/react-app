@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import { Link,useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import "./login.css";
 
@@ -7,27 +9,50 @@ function Login() {
   // React States
   const [errorMessages, setErrorMessages] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [code,setCode] = useState("red")
+  const [error,setError] = useState("")
 
-  // User Login info
-  const database = [
-    {
-      username: "user1",
-      password: "pass1"
-    },
-    {
-      username: "user2",
-      password: "pass2"
-    }
-  ];
+  const navigate = useNavigate();
 
-  const errors = {
-    uname: "invalid username",
-    pass: "invalid password"
-  };
 
   const handleSubmit = (event) => {
- 
+    event.preventDefault()
+    var email = event.target[0].value
+    var password = event.target[1].value
+    const data = new FormData();
+    data.append("email", email);
+    data.append("password", password);
+    
+        const requestOptions = {
+          method: 'POST',
+          body: data
+      };
+      axios.post('https://attorney1234.herokuapp.com/v1/login/',
+      data
+      ).then((response)=>{
+        if(response.data['code'] == 201){
+          setCode("green")
+          console.log(response.code)
+          setError("Login Successful")
+          localStorage.setItem("token",response.data['token'])
+          localStorage.setItem('userId',response.data['userId'])
+          redirecting()
+        }
+        else{
+          setCode("red")
+          setError("Wrong Email & Password")
+          console.log(response.data['code'])
+        }
+      }).catch((error)=>{
+        console.log(error)
+      })
+
+      const redirecting = ()=>{
+        return navigate('/emp')
+      }
+
   };
+
 
   // Generate JSX code for error message
   const renderErrorMessage = (name) =>
@@ -53,8 +78,10 @@ function Login() {
           <input type="submit" />
         </div>
         <div style={{marginTop:"20px"}}>
-            <p>Don't have an account? <a href="">Register</a> </p>
-
+            <p>Don't have an account? <Link to="/register">Register</Link> </p>
+        </div>
+        <div>
+          <p style={{color: code}}>{error}</p>
         </div>
       </form>
     </div>
@@ -64,7 +91,7 @@ function Login() {
     <div className="app">
       <div className="login-form">
         <div className="title">Sign In</div>
-        {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
+        {renderForm}
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
+import { Link } from "react-router-dom";
 
 import "./login.css";
 
@@ -7,28 +8,46 @@ function Register() {
   // React States
   const [errorMessages, setErrorMessages] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [code,setCode] = useState("red")
+  const [error,setError] = useState("")
 
-  // User Login info
-  const database = [
-    {
-      username: "user1",
-      password: "pass1"
-    },
-    {
-      username: "user2",
-      password: "pass2"
-    }
-  ];
 
-  const errors = {
-    uname: "invalid username",
-    pass: "invalid password"
-  };
 
   const handleSubmit = (event) => {
- 
+    event.preventDefault()
+    var email = event.target[0].value
+    var password = event.target[1].value
+
+    const data = new FormData();
+    data.append("email", email);
+    data.append("password", password);
+    
+        const requestOptions = {
+          method: 'POST',
+          body: data
+      };
+      fetch('https://attorney1234.herokuapp.com/v1/create/', requestOptions)
+          .then(response => response.json())
+          .then((response)=>{
+            if(response.code == 200){
+              setCode("green")
+              setIsSubmitted(true)
+              console.log(response.code)
+              setError("Login Successful")
+              localStorage.setItem("token",response.data['token'])
+              localStorage.setItem('userId',response.data['userId'])
+            }else{
+              setCode("red")
+              setIsSubmitted(false)
+              setError("Wrong Email & Password")
+              console.log(response.code)
+            }
+          });
+
   };
 
+  
+  
   // Generate JSX code for error message
   const renderErrorMessage = (name) =>
     name === errorMessages.name && (
@@ -54,7 +73,7 @@ function Register() {
           <input type="submit" />
         </div>
         <div style={{marginTop:"20px"}}>
-            <p>Already have an account? <a href="">Login</a> </p>
+            <p>Already have an account? <Link to="/login">Login</Link> </p>
         </div>
       </form>
     </div>
@@ -64,7 +83,7 @@ function Register() {
     <div className="app">
       <div className="login-form">
         <div className="title">Register</div>
-        {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
+        {isSubmitted ? <div>User is successfully created</div> : renderForm}
       </div>
     </div>
   );
